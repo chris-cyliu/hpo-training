@@ -658,7 +658,14 @@ class CUHKPrototypeTunerV2(MsgDispatcherBase):
                 logger.info("Set \"TRIAL_BUDGET\" value to %s (max budget)", self.max_budget)
             self.moo_manager.receive_trial_result(parameters=barely_params, value=trial_info['value'], budget=_budget)
         logger.info("Successfully import tuning data to CUHKPrototypeTunerV2.")
-    
+
+        # calculate the curr_s with the number of trial todo: if more than 1 round of DFHB
+        logger.info("Resume from last history. fix curr_s now")
+        self.curr_s = 0
+        self.generated_hyper_configs = []
+        self.generate_new_bracket()
+
+
     def extract_scalar_value(self, raw_data, extract_key='default', opposite_key='maximize'):
         assert isinstance(raw_data, dict)
         assert extract_key in raw_data

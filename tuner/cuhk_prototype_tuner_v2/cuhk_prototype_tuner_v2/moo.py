@@ -235,7 +235,7 @@ class MultiObjectiveOptimizer():
             if float('inf') in qinfo.val:
                 return
         self._update_history(qinfos)
-        self._add_data_to_model(qinfos) 
+        self._add_data_to_model(qinfos)
         
     def extract(self, value, non_opposite_key='maximize'):
         """
@@ -305,10 +305,16 @@ class MultiObjectiveOptimizer():
                 if isinstance(parameters[name], np.str_):
                     parameters[name] = str(parameters[name])
                 non_num_para.append(parameters[name])
-        qinfos = [Namespace(
-            point=[non_num_para, num_para],
-            val=report_value
-        )]
+        if len(non_num_para) == 0:
+            qinfos = [Namespace(
+                point=[num_para],
+                val=report_value
+            )]
+        else:
+            qinfos = [Namespace(
+                point=[non_num_para, num_para],
+                val=report_value
+            )]
         return qinfos
     
     def _update_history(self, qinfos):
